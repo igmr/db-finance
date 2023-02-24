@@ -2,6 +2,12 @@
 
 Base de datos, Finanzas personales.
 
+## Repositorio
+
+```bash
+git clone https://github.com/igmr/db-finance.git
+```
+
 ## Modelo entidad relación
 
 ![img-modelo-entidad-relación](/docs/Model-ER.png)

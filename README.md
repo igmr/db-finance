@@ -29,15 +29,15 @@ USE Finzadb;
 DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users
 (
-  id          INT          NOT NULL AUTO_INCREMENT,
-  first_name  VARCHAR(45)  NOT NULL,
-  last_name   VARCHAR(45)  NOT NULL,
-  user        VARCHAR(65)  NOT NULL,
-  password    VARCHAR(255) NOT NULL,
-  avatar      VARCHAR(255) NOT NULL,
-  created_at  TIMESTAMP    NOT NULL DEFAULT NOW(),
-  updated_at  TIMESTAMP        NULL DEFAULT NULL,
-  deleted_at  TIMESTAMP        NULL DEFAULT NULL,
+  id            INT          NOT NULL AUTO_INCREMENT,
+  first_name    VARCHAR(45)  NOT NULL,
+  last_name     VARCHAR(45)  NOT NULL,
+  user          VARCHAR(65)  NOT NULL,
+  password      VARCHAR(255) NOT NULL,
+  avatar        VARCHAR(255) NOT NULL,
+  created_date  TIMESTAMP    NOT NULL DEFAULT NOW(),
+  updated_date  TIMESTAMP        NULL DEFAULT NULL,
+  deleted_date  TIMESTAMP        NULL DEFAULT NULL,
   CONSTRAINT pkUser        PRIMARY KEY(id),
   CONSTRAINT ukUser        UNIQUE(user)
 );
@@ -67,9 +67,9 @@ CREATE TABLE IF NOT EXISTS accounts
   amount_ingress DOUBLE       NOT NULL DEFAULT 0,
   amount_egress  DOUBLE       NOT NULL DEFAULT 0,
   balance        DOUBLE       NOT NULL DEFAULT 0,
-  created_at     TIMESTAMP    NOT NULL DEFAULT NOW(),
-  updated_at     TIMESTAMP        NULL DEFAULT NULL,
-  deleted_at     TIMESTAMP        NULL DEFAULT NULL,
+  created_date   TIMESTAMP    NOT NULL DEFAULT NOW(),
+  updated_date   TIMESTAMP        NULL DEFAULT NULL,
+  deleted_date   TIMESTAMP        NULL DEFAULT NULL,
   CONSTRAINT pkAccount        PRIMARY KEY(id),
   CONSTRAINT ukAccount        UNIQUE(description)
 );
@@ -88,9 +88,9 @@ CREATE TABLE IF NOT EXISTS subaccounts
   amount_ingress DOUBLE           NOT NULL DEFAULT 0,
   amount_egress  DOUBLE           NOT NULL DEFAULT 0,
   balance        DOUBLE           NOT NULL DEFAULT 0,
-  created_at     TIMESTAMP        NOT NULL DEFAULT NOW(),
-  updated_at     TIMESTAMP            NULL DEFAULT NULL,
-  deleted_at     TIMESTAMP            NULL DEFAULT NULL,
+  created_date   TIMESTAMP        NOT NULL DEFAULT NOW(),
+  updated_date   TIMESTAMP            NULL DEFAULT NULL,
+  deleted_date   TIMESTAMP            NULL DEFAULT NULL,
   CONSTRAINT pkSubaccount         PRIMARY KEY(id),
   CONSTRAINT ukSubaccount         UNIQUE(description),
   CONSTRAINT fkAccountSubaccount  FOREIGN KEY(account_id) REFERENCES accounts(id)
@@ -109,9 +109,9 @@ CREATE TABLE IF NOT EXISTS categories
   amount_ingress DOUBLE       NOT NULL DEFAULT 0,
   amount_egress  DOUBLE       NOT NULL DEFAULT 0,
   balance        DOUBLE       NOT NULL DEFAULT 0,
-  created_at     TIMESTAMP    NOT NULL DEFAULT NOW(),
-  updated_at     TIMESTAMP        NULL DEFAULT NULL,
-  deleted_at     TIMESTAMP        NULL DEFAULT NULL,
+  created_date   TIMESTAMP    NOT NULL DEFAULT NOW(),
+  updated_date   TIMESTAMP        NULL DEFAULT NULL,
+  deleted_date   TIMESTAMP        NULL DEFAULT NULL,
   CONSTRAINT pkCategory      PRIMARY KEY(id),
   CONSTRAINT ukCategory      UNIQUE(description)
 );
@@ -130,9 +130,9 @@ CREATE TABLE IF NOT EXISTS subCategories
   amount_ingress DOUBLE        NOT NULL DEFAULT 0,
   amount_egress  DOUBLE        NOT NULL DEFAULT 0,
   balance        DOUBLE        NOT NULL DEFAULT 0,
-  created_at     TIMESTAMP     NOT NULL DEFAULT NOW(),
-  updated_at     TIMESTAMP         NULL DEFAULT NULL,
-  deleted_at     TIMESTAMP         NULL DEFAULT NULL,
+  created_date   TIMESTAMP     NOT NULL DEFAULT NOW(),
+  updated_date   TIMESTAMP         NULL DEFAULT NULL,
+  deleted_date   TIMESTAMP         NULL DEFAULT NULL,
   CONSTRAINT pkSubCategory         PRIMARY KEY(id),
   CONSTRAINT ukSubCategory         UNIQUE(description),
   CONSTRAINT fkCategorySubcategory FOREIGN KEY(category_id) REFERENCES categories(id)
@@ -150,9 +150,9 @@ CREATE TABLE IF NOT EXISTS ingress
   subaccount_id  INT          NOT NULL DEFAULT 1,
   amount         DOUBLE           NULL DEFAULT 0,
   observation    VARCHAR(255) NOT NULL,
-  created_at     TIMESTAMP    NOT NULL DEFAULT NOW(),
-  updated_at     TIMESTAMP        NULL DEFAULT NULL,
-  deleted_at     TIMESTAMP        NULL DEFAULT NULL,
+  created_date   TIMESTAMP    NOT NULL DEFAULT NOW(),
+  updated_date   TIMESTAMP        NULL DEFAULT NULL,
+  deleted_date   TIMESTAMP        NULL DEFAULT NULL,
   CONSTRAINT pkIngress             PRIMARY KEY(id),
   CONSTRAINT fkIngressSubcategory FOREIGN KEY(subcategory_id) REFERENCES categories(id),
   CONSTRAINT fkIngressSubAccount  FOREIGN KEY(subaccount_id) REFERENCES  subaccounts(id)
@@ -170,9 +170,9 @@ CREATE TABLE IF NOT EXISTS egress
   subaccount_id  INT          NOT NULL DEFAULT 1,
   amount         DOUBLE           NULL DEFAULT 0,
   observation    VARCHAR(255) NOT NULL,
-  created_at     TIMESTAMP    NOT NULL DEFAULT NOW(),
-  updated_at     TIMESTAMP        NULL DEFAULT NULL,
-  deleted_at     TIMESTAMP        NULL DEFAULT NULL,
+  created_date   TIMESTAMP    NOT NULL DEFAULT NOW(),
+  updated_date   TIMESTAMP        NULL DEFAULT NULL,
+  deleted_date   TIMESTAMP        NULL DEFAULT NULL,
   CONSTRAINT pkEgress             PRIMARY KEY(id),
   CONSTRAINT fkEgressSubcategory  FOREIGN KEY(subcategory_id) REFERENCES categories(id),
   CONSTRAINT fkEgressSubAccount   FOREIGN KEY(subaccount_id) REFERENCES  subaccounts(id)

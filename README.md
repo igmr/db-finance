@@ -179,3 +179,174 @@ CREATE TABLE IF NOT EXISTS egress
 ```
 
 </details>
+
+## Script sqlite
+
+<details>
+
+<summary>Script SQL para Sqlite</summary>
+
+Crear base de datos
+
+```bash
+touch /path/to/database.sqlite
+```
+
+```sql
+
+-- ----------------------------------------
+-- Table users
+-- ----------------------------------------
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  id            INTEGER       NOT NULL,
+  first_name    VARCHAR(45)   NOT NULL,
+  last_name     VARCHAR(45)   NOT NULL,
+  user          VARCHAR(65)   NOT NULL UNIQUE,
+  password      VARCHAR(255)  NOT NULL,
+  avatar        VARCHAR(255)      NULL,
+  created_date  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_date  TIMESTAMP         NULL,
+  deleted_date  TIMESTAMP         NULL,
+  CONSTRAINT pkUser PRIMARY KEY(id AUTOINCREMENT),
+  CONSTRAINT ukUser UNIQUE(user)
+);
+-- ----------------------------------------
+-- Table settings
+-- ----------------------------------------
+DROP TABLE IF EXISTS settings;
+CREATE TABLE settings
+(
+  id               INTEGER  NOT NULL,
+  show_all         BOOLEAN  NOT NULL DEFAULT FALSE,
+  allow_negatives  BOOLEAN  NOT NULL DEFAULT FALSE,
+  CONSTRAINT pkSetting PRIMARY KEY(id AUTOINCREMENT)
+);
+
+-- ----------------------------------------
+-- Table accounts
+-- ----------------------------------------
+DROP TABLE IF EXISTS accounts;
+CREATE TABLE accounts
+(
+  id             INTEGER      NOT NULL,
+  user_id        INTEGER      NOT NULL DEFAULT 0,
+  description    VARCHAR(255) NOT NULL,
+  icon           CHAR(45)         NULL DEFAULT NULL,
+  amount_ingress DOUBLE       NOT NULL DEFAULT 0,
+  amount_egress  DOUBLE       NOT NULL DEFAULT 0,
+  balance        DOUBLE       NOT NULL DEFAULT 0,
+  created_date   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_date   TIMESTAMP        NULL DEFAULT NULL,
+  deleted_date   TIMESTAMP        NULL DEFAULT NULL,
+  CONSTRAINT pkAccount PRIMARY KEY(id AUTOINCREMENT)
+  CONSTRAINT ukAccount UNIQUE(description)
+);
+
+-- ----------------------------------------
+-- Table subaccounts
+-- ----------------------------------------
+DROP TABLE IF EXISTS subaccounts;
+CREATE TABLE subaccounts
+(
+  id             INTEGER       NOT NULL,
+  account_id     INTEGER       NOT NULL DEFAULT 1,
+  user_id        INTEGER       NOT NULL DEFAULT 0,
+  description    VARCHAR(255)  NOT NULL,
+  icon           CHAR(45)          NULL DEFAULT NULL,
+  amount_ingress DOUBLE        NOT NULL DEFAULT 0,
+  amount_egress  DOUBLE        NOT NULL DEFAULT 0,
+  balance        DOUBLE        NOT NULL DEFAULT 0,
+  created_date   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_date   TIMESTAMP         NULL DEFAULT NULL,
+  deleted_date   TIMESTAMP         NULL DEFAULT NULL,
+  CONSTRAINT pkSubaccount         PRIMARY KEY(id AUTOINCREMENT)
+  CONSTRAINT ukSubaccount         UNIQUE(description),
+  CONSTRAINT fkAccountSubaccount  FOREIGN KEY(account_id) REFERENCES accounts(id)
+);
+
+-- ----------------------------------------
+-- Table categories
+-- ----------------------------------------
+DROP TABLE IF EXISTS categories;
+CREATE TABLE categories
+(
+  id             INTEGER      NOT NULL,
+  user_id        INTEGER      NOT NULL DEFAULT 0,
+  description    VARCHAR(255) NOT NULL,
+  icon           CHAR(45)         NULL DEFAULT NULL,
+  amount_ingress DOUBLE       NOT NULL DEFAULT 0,
+  amount_egress  DOUBLE       NOT NULL DEFAULT 0,
+  balance        DOUBLE       NOT NULL DEFAULT 0,
+  created_date   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_date   TIMESTAMP        NULL DEFAULT NULL,
+  deleted_date   TIMESTAMP        NULL DEFAULT NULL,
+  CONSTRAINT pkCategory      PRIMARY KEY(id AUTOINCREMENT)
+  CONSTRAINT ukCategory      UNIQUE(description)
+);
+
+-- ----------------------------------------
+-- Table subcategories
+-- ----------------------------------------
+DROP TABLE IF EXISTS subCategories;
+CREATE TABLE subCategories
+(
+  id             INTEGER       NOT NULL,
+  user_id        INTEGER       NOT NULL DEFAULT 0,
+  category_id    INTEGER       NOT NULL DEFAULT 1,
+  description    VARCHAR(255)  NOT NULL,
+  icon           CHAR(45)          NULL DEFAULT NULL,
+  amount_ingress DOUBLE        NOT NULL DEFAULT 0,
+  amount_egress  DOUBLE        NOT NULL DEFAULT 0,
+  balance        DOUBLE        NOT NULL DEFAULT 0,
+  created_date   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_date   TIMESTAMP         NULL DEFAULT NULL,
+  deleted_date   TIMESTAMP         NULL DEFAULT NULL,
+  CONSTRAINT pkSubCategory     PRIMARY KEY(id AUTOINCREMENT)
+  CONSTRAINT ukSubCategory     UNIQUE(description),
+  CONSTRAINT fkCategorySubcategory FOREIGN KEY(category_id) REFERENCES categories(id)
+);
+
+-- ----------------------------------------
+-- Table ingress
+-- ----------------------------------------
+DROP TABLE IF EXISTS ingress;
+CREATE TABLE ingress
+(
+  id             INTEGER       NOT NULL,
+  user_id        INTEGER       NOT NULL DEFAULT 0,
+  subcategory_id INTEGER       NOT NULL DEFAULT 1,
+  subaccount_id  INTEGER       NOT NULL DEFAULT 1,
+  amount         DOUBLE            NULL DEFAULT 0,
+  observation    VARCHAR(255)  NOT NULL,
+  created_date   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_date   TIMESTAMP         NULL DEFAULT NULL,
+  deleted_date   TIMESTAMP         NULL DEFAULT NULL,
+  CONSTRAINT pkIngress             PRIMARY KEY(id AUTOINCREMENT),
+  CONSTRAINT fkIngressSubcategory  FOREIGN KEY(subcategory_id) REFERENCES categories(id),
+  CONSTRAINT fkIngressSubAccount   FOREIGN KEY(subaccount_id) REFERENCES  subaccounts(id)
+);
+
+-- ----------------------------------------
+-- Table egress
+-- ----------------------------------------
+DROP TABLE IF EXISTS egress;
+CREATE TABLE egress
+(
+  id             INTEGER      NOT NULL,
+  user_id        INTEGER      NOT NULL DEFAULT 0,
+  subcategory_id INTEGER      NOT NULL DEFAULT 1,
+  subaccount_id  INTEGER      NOT NULL DEFAULT 1,
+  amount         DOUBLE           NULL DEFAULT 0,
+  observation    VARCHAR(255) NOT NULL,
+  created_date   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_date   TIMESTAMP        NULL DEFAULT NULL,
+  deleted_date   TIMESTAMP        NULL DEFAULT NULL,
+  CONSTRAINT pkEgress             PRIMARY KEY(id AUTOINCREMENT),
+  CONSTRAINT fkEgressSubcategory  FOREIGN KEY(subcategory_id) REFERENCES categories(id),
+  CONSTRAINT fkEgressSubAccount   FOREIGN KEY(subaccount_id) REFERENCES  subaccounts(id)
+);
+
+```
+
+</details>

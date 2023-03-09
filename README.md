@@ -24,56 +24,6 @@ CREATE DATABASE IF NOT EXISTS Finzadb;
 USE Finzadb;
 
 -- ----------------------------------------
--- Table accounts_base
--- ----------------------------------------
-DROP TABLE IF EXISTS accounts_base;
-CREATE TABLE IF NOT EXISTS accounts_base
-(
-  id           INT              NOT NULL,
-  description  VARCHAR(255)     NOT NULL,
-  CONSTRAINT pkAccountsBase     PRIMARY KEY(id),
-  CONSTRAINT ukDescAccountsBase UNIQUE(description)
-);
-
--- ----------------------------------------
--- Table subaccounts_base
--- ----------------------------------------
-DROP TABLE IF EXISTS subaccounts_base;
-CREATE TABLE IF NOT EXISTS subaccounts_base
-(
-  id              INT              NOT NULL,
-  account_base_id INT              NOT NULL,
-  description     VARCHAR(255)     NOT NULL,
-  CONSTRAINT pkSubaccountsBase     PRIMARY KEY(id),
-  CONSTRAINT ukDescSubaccountsBase UNIQUE(description)
-);
-
--- ----------------------------------------
--- Table categories_base
--- ----------------------------------------
-DROP TABLE IF EXISTS categories_base;
-CREATE TABLE IF NOT EXISTS categories_base
-(
-  id           INT                NOT NULL,
-  description  VARCHAR(255)       NOT NULL,
-  CONSTRAINT pkCategoriesBase     PRIMARY KEY(id)
-  CONSTRAINT ukDescCategoriesBase UNIQUE(description)
-);
-
--- ----------------------------------------
--- Table subcategories_base
--- ----------------------------------------
-DROP TABLE IF EXISTS subcategories_base;
-CREATE TABLE IF NOT EXISTS subcategories_base
-(
-  id                INT              NOT NULL,
-  category_base_id  INT              NOT NULL,
-  description       VARCHAR(255)     NOT NULL,
-  CONSTRAINT pkSubcategoriesBase     PRIMARY KEY(id),
-  CONSTRAINT ukDescSubcategoriesBase UNIQUE(description)
-);
-
--- ----------------------------------------
 -- Table users
 -- ----------------------------------------
 DROP TABLE IF EXISTS users;
@@ -88,8 +38,20 @@ CREATE TABLE IF NOT EXISTS users
   created_at  TIMESTAMP    NOT NULL DEFAULT NOW(),
   updated_at  TIMESTAMP        NULL DEFAULT NULL,
   deleted_at  TIMESTAMP        NULL DEFAULT NULL,
-  CONSTRAINT pkUsers       PRIMARY KEY(id),
-  CONSTRAINT ukUserUsers   UNIQUE(user)
+  CONSTRAINT pkUser        PRIMARY KEY(id),
+  CONSTRAINT ukUser        UNIQUE(user)
+);
+
+-- ----------------------------------------
+-- Table settings
+-- ----------------------------------------
+DROP TABLE IF EXISTS settings;
+CREATE TABLE IF NOT EXISTS settings
+(
+  id               INT      NOT NULL AUTO_INCREMENT,
+  show_all         BOOLEAN  NOT NULL DEFAULT FALSE,
+  allow_negatives  BOOLEAN  NOT NULL DEFAULT FALSE,
+  CONSTRAINT pkSetting      PRIMARY KEY(id)
 );
 
 -- ----------------------------------------
@@ -108,7 +70,8 @@ CREATE TABLE IF NOT EXISTS accounts
   created_at     TIMESTAMP    NOT NULL DEFAULT NOW(),
   updated_at     TIMESTAMP        NULL DEFAULT NULL,
   deleted_at     TIMESTAMP        NULL DEFAULT NULL,
-  CONSTRAINT pkAccounts       PRIMARY KEY(id)
+  CONSTRAINT pkAccount        PRIMARY KEY(id),
+  CONSTRAINT ukAccount        UNIQUE(description)
 );
 
 -- ----------------------------------------
@@ -118,8 +81,8 @@ DROP TABLE IF EXISTS subaccounts;
 CREATE TABLE IF NOT EXISTS subaccounts
 (
   id             INT              NOT NULL AUTO_INCREMENT,
-  user_id        INT              NOT NULL DEFAULT 0,
   account_id     INT              NOT NULL DEFAULT 1,
+  user_id        INT              NOT NULL DEFAULT 0,
   description    VARCHAR(255)     NOT NULL,
   icon           CHAR(45)             NULL DEFAULT NULL,
   amount_ingress DOUBLE           NOT NULL DEFAULT 0,
@@ -128,7 +91,8 @@ CREATE TABLE IF NOT EXISTS subaccounts
   created_at     TIMESTAMP        NOT NULL DEFAULT NOW(),
   updated_at     TIMESTAMP            NULL DEFAULT NULL,
   deleted_at     TIMESTAMP            NULL DEFAULT NULL,
-  CONSTRAINT pkSubaccounts        PRIMARY KEY(id),
+  CONSTRAINT pkSubaccount         PRIMARY KEY(id),
+  CONSTRAINT ukSubaccount         UNIQUE(description),
   CONSTRAINT fkAccountSubaccount  FOREIGN KEY(account_id) REFERENCES accounts(id)
 );
 
@@ -148,7 +112,8 @@ CREATE TABLE IF NOT EXISTS categories
   created_at     TIMESTAMP    NOT NULL DEFAULT NOW(),
   updated_at     TIMESTAMP        NULL DEFAULT NULL,
   deleted_at     TIMESTAMP        NULL DEFAULT NULL,
-  CONSTRAINT pkCategories     PRIMARY KEY(id)
+  CONSTRAINT pkCategory      PRIMARY KEY(id),
+  CONSTRAINT ukCategory      UNIQUE(description)
 );
 
 -- ----------------------------------------
@@ -157,18 +122,19 @@ CREATE TABLE IF NOT EXISTS categories
 DROP TABLE IF EXISTS subCategories;
 CREATE TABLE IF NOT EXISTS subCategories
 (
-  id             INT          NOT NULL AUTO_INCREMENT,
-  user_id        INT          NOT NULL DEFAULT 0,
-  category_id    INT          NOT NULL DEFAULT 1,
-  description    VARCHAR(255) NOT NULL,
-  icon           CHAR(45)         NULL DEFAULT NULL,
-  amount_ingress DOUBLE       NOT NULL DEFAULT 0,
-  amount_egress  DOUBLE       NOT NULL DEFAULT 0,
-  balance        DOUBLE       NOT NULL DEFAULT 0,
-  created_at     TIMESTAMP    NOT NULL DEFAULT NOW(),
-  updated_at     TIMESTAMP        NULL DEFAULT NULL,
-  deleted_at     TIMESTAMP        NULL DEFAULT NULL,
-  CONSTRAINT pkSubCategories     PRIMARY KEY(id),
+  id             INT           NOT NULL AUTO_INCREMENT,
+  user_id        INT           NOT NULL DEFAULT 0,
+  category_id    INT           NOT NULL DEFAULT 1,
+  description    VARCHAR(255)  NOT NULL,
+  icon           CHAR(45)          NULL DEFAULT NULL,
+  amount_ingress DOUBLE        NOT NULL DEFAULT 0,
+  amount_egress  DOUBLE        NOT NULL DEFAULT 0,
+  balance        DOUBLE        NOT NULL DEFAULT 0,
+  created_at     TIMESTAMP     NOT NULL DEFAULT NOW(),
+  updated_at     TIMESTAMP         NULL DEFAULT NULL,
+  deleted_at     TIMESTAMP         NULL DEFAULT NULL,
+  CONSTRAINT pkSubCategory         PRIMARY KEY(id),
+  CONSTRAINT ukSubCategory         UNIQUE(description),
   CONSTRAINT fkCategorySubcategory FOREIGN KEY(category_id) REFERENCES categories(id)
 );
 
@@ -213,9 +179,9 @@ CREATE TABLE IF NOT EXISTS egress
 );
 
 -- ----------------------------------------
--- Inserts categories_base
+-- Inserts categories
 -- ----------------------------------------
-INSERT INTO categories_base(id, description)
+INSERT INTO categories(id, description)
 VALUES
   (001,  'Ingreso'               ),
   (002,  '(Ninguno)'             ),
@@ -233,9 +199,9 @@ VALUES
   (014,  'Deudas'                );
 
 -- ----------------------------------------
--- Inserts subcategories_base
+-- Inserts subcategories
 -- ----------------------------------------
-INSERT INTO subcategories_base(id, category_base_id, description)
+INSERT INTO subcategories(id, category_id, description)
 VALUES
   (001,  001,  'Ingreso'                        ),
 
@@ -331,5 +297,23 @@ VALUES
   (089,  014,  'Deuda otro 3'                   ),
   (090,  014,  'Deuda otro 4'                   ),
   (091,  014,  'Deuda otro 5'                   );
+
+-- ----------------------------------------
+-- Inserts account
+-- ----------------------------------------
+INSERT INTO accounts(description)
+VALUES ('Efectivo');
+
+-- ----------------------------------------
+-- Inserts subaccount
+-- ----------------------------------------
+INSERT INTO subaccounts(account_id,description)
+VALUES (1, 'Efectivo');
+
+-- ----------------------------------------
+-- Inserts Settings
+-- ----------------------------------------
+INSERT INTO settings (show_all,allow_negatives)
+VALUES (FALSE, FALSE);
 
 ```

@@ -124,8 +124,8 @@ DROP TABLE IF EXISTS subcategories;
 CREATE TABLE IF NOT EXISTS subcategories
 (
   id             INT           NOT NULL AUTO_INCREMENT,
-  user_id        INT           NOT NULL DEFAULT 0,
   category_id    INT           NOT NULL DEFAULT 1,
+  user_id        INT           NOT NULL DEFAULT 0,
   description    VARCHAR(255)  NOT NULL,
   icon           CHAR(45)          NULL DEFAULT NULL,
   created_date   TIMESTAMP     NOT NULL DEFAULT NOW(),
@@ -143,9 +143,9 @@ DROP TABLE IF EXISTS ingress;
 CREATE TABLE IF NOT EXISTS ingress
 (
   id             INT          NOT NULL AUTO_INCREMENT,
-  user_id        INT          NOT NULL DEFAULT 0,
   subcategory_id INT          NOT NULL DEFAULT 1,
   subaccount_id  INT          NOT NULL DEFAULT 1,
+  user_id        INT           NOT NULL DEFAULT 0,
   amount         DOUBLE           NULL DEFAULT 0,
   observation    VARCHAR(255) NOT NULL,
   created_date   TIMESTAMP    NOT NULL DEFAULT NOW(),
@@ -163,9 +163,9 @@ DROP TABLE IF EXISTS egress;
 CREATE TABLE IF NOT EXISTS egress
 (
   id             INT          NOT NULL AUTO_INCREMENT,
-  user_id        INT          NOT NULL DEFAULT 0,
   subcategory_id INT          NOT NULL DEFAULT 1,
   subaccount_id  INT          NOT NULL DEFAULT 1,
+  user_id        INT           NOT NULL DEFAULT 0,
   amount         DOUBLE           NULL DEFAULT 0,
   observation    VARCHAR(255) NOT NULL,
   created_date   TIMESTAMP    NOT NULL DEFAULT NOW(),

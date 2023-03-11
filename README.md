@@ -40,16 +40,15 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users
 (
   id            INT          NOT NULL AUTO_INCREMENT,
-  first_name    VARCHAR(45)  NOT NULL,
-  last_name     VARCHAR(45)  NOT NULL,
-  user          VARCHAR(65)  NOT NULL,
+  name          VARCHAR(65)  NOT NULL,
+  email         VARCHAR(120) NOT NULL,
   password      VARCHAR(255) NOT NULL,
-  avatar        VARCHAR(255) NOT NULL,
+  avatar        VARCHAR(255)     NULL DEFAULT NULL,
   created_date  TIMESTAMP    NOT NULL DEFAULT NOW(),
   updated_date  TIMESTAMP        NULL DEFAULT NULL,
   deleted_date  TIMESTAMP        NULL DEFAULT NULL,
   CONSTRAINT pkUser        PRIMARY KEY(id),
-  CONSTRAINT ukUser        UNIQUE(user)
+  CONSTRAINT ukUser        UNIQUE(email)
 );
 
 -- ----------------------------------------
@@ -200,16 +199,15 @@ touch /path/to/database.sqlite
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   id            INTEGER       NOT NULL,
-  first_name    VARCHAR(45)   NOT NULL,
-  last_name     VARCHAR(45)   NOT NULL,
-  user          VARCHAR(65)   NOT NULL UNIQUE,
+  name          VARCHAR(65)   NOT NULL,
+  email         VARCHAR(120)  NOT NULL UNIQUE,
   password      VARCHAR(255)  NOT NULL,
   avatar        VARCHAR(255)      NULL,
   created_date  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_date  TIMESTAMP         NULL,
   deleted_date  TIMESTAMP         NULL,
   CONSTRAINT pkUser PRIMARY KEY(id AUTOINCREMENT),
-  CONSTRAINT ukUser UNIQUE(user)
+  CONSTRAINT ukUser UNIQUE(email)
 );
 -- ----------------------------------------
 -- Table settings

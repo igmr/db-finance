@@ -95,7 +95,6 @@ CREATE TABLE IF NOT EXISTS subaccounts
   updated_date   TIMESTAMP            NULL DEFAULT NULL,
   deleted_date   TIMESTAMP            NULL DEFAULT NULL,
   CONSTRAINT pkSubaccount         PRIMARY KEY(id),
-  CONSTRAINT ukSubaccount         UNIQUE(description),
   CONSTRAINT fkAccountSubaccount  FOREIGN KEY(account_id) REFERENCES accounts(id)
 );
 
@@ -237,7 +236,7 @@ CREATE TABLE accounts
   created_date   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_date   TIMESTAMP        NULL DEFAULT NULL,
   deleted_date   TIMESTAMP        NULL DEFAULT NULL,
-  CONSTRAINT pkAccount PRIMARY KEY(id AUTOINCREMENT)
+  CONSTRAINT pkAccount PRIMARY KEY(id AUTOINCREMENT),
   CONSTRAINT ukAccount UNIQUE(description)
 );
 
@@ -258,8 +257,7 @@ CREATE TABLE subaccounts
   created_date   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_date   TIMESTAMP         NULL DEFAULT NULL,
   deleted_date   TIMESTAMP         NULL DEFAULT NULL,
-  CONSTRAINT pkSubaccount         PRIMARY KEY(id AUTOINCREMENT)
-  CONSTRAINT ukSubaccount         UNIQUE(description),
+  CONSTRAINT pkSubaccount         PRIMARY KEY(id AUTOINCREMENT),
   CONSTRAINT fkAccountSubaccount  FOREIGN KEY(account_id) REFERENCES accounts(id)
 );
 
@@ -279,7 +277,7 @@ CREATE TABLE categories
   created_date   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_date   TIMESTAMP        NULL DEFAULT NULL,
   deleted_date   TIMESTAMP        NULL DEFAULT NULL,
-  CONSTRAINT pkCategory      PRIMARY KEY(id AUTOINCREMENT)
+  CONSTRAINT pkCategory      PRIMARY KEY(id AUTOINCREMENT),
   CONSTRAINT ukCategory      UNIQUE(description)
 );
 
@@ -300,7 +298,7 @@ CREATE TABLE subCategories
   created_date   TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_date   TIMESTAMP         NULL DEFAULT NULL,
   deleted_date   TIMESTAMP         NULL DEFAULT NULL,
-  CONSTRAINT pkSubCategory     PRIMARY KEY(id AUTOINCREMENT)
+  CONSTRAINT pkSubCategory     PRIMARY KEY(id AUTOINCREMENT),
   CONSTRAINT ukSubCategory     UNIQUE(description),
   CONSTRAINT fkCategorySubcategory FOREIGN KEY(category_id) REFERENCES categories(id)
 );

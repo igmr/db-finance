@@ -2053,8 +2053,7 @@
 							},
 							"name": "description",
 							"type": "VARCHAR",
-							"length": "255",
-							"unique": true
+							"length": "255"
 						},
 						{
 							"_type": "ERDColumn",
